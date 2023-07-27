@@ -1,3 +1,9 @@
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { heroAdd } from "../../actions";
+
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 // Задача для этого компонента:
@@ -11,8 +17,30 @@
 // данных из фильтров
 
 const HeroesAddForm = () => {
+
+    const {heroes} = useSelector(state => state);
+    const dispatch = useDispatch();
+
+    const [heroName, setHeroName] = useState('');
+    const [heroDescr, setHeroDescr] = useState('');
+    const [heroElement, setHeroElement] = useState('');
+
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+        const newHero = {
+            id: uuidv4(),
+            name: heroName,
+            description: heroDescr,
+            element: heroElement
+        }
+        dispatch(heroAdd(newHero))
+        setHeroName('')
+        setHeroDescr('')
+        setHeroElement('')
+    }
+
     return (
-        <form className="border p-4 shadow-lg rounded">
+        <form className="border p-4 shadow-lg rounded" onSubmit={onSubmitHandler}>
             <div className="mb-3">
                 <label htmlFor="name" className="form-label fs-4">Имя нового героя</label>
                 <input 
@@ -21,7 +49,9 @@ const HeroesAddForm = () => {
                     name="name" 
                     className="form-control" 
                     id="name" 
-                    placeholder="Как меня зовут?"/>
+                    placeholder="Как меня зовут?"
+                    value={heroName}
+                    onChange={(e) => setHeroName(e.target.value)}/>
             </div>
 
             <div className="mb-3">
@@ -32,7 +62,9 @@ const HeroesAddForm = () => {
                     className="form-control" 
                     id="text" 
                     placeholder="Что я умею?"
-                    style={{"height": '130px'}}/>
+                    style={{"height": '130px'}}
+                    value={heroDescr}
+                    onChange={(e) => setHeroDescr(e.target.value)}/>
             </div>
 
             <div className="mb-3">
@@ -41,7 +73,9 @@ const HeroesAddForm = () => {
                     required
                     className="form-select" 
                     id="element" 
-                    name="element">
+                    name="element"
+                    value={heroElement}
+                    onChange={(e) => setHeroElement(e.target.value)}>
                     <option >Я владею элементом...</option>
                     <option value="fire">Огонь</option>
                     <option value="water">Вода</option>
