@@ -1,7 +1,7 @@
 import { useHttp } from "../../hooks/http.hook";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { filterChanged, filtersFetched, heroesFiltered } from "../../actions";
+import { filterChanged, filtersFetched } from "../../actions";
 
 // Задача для этого компонента:
 // 1) Фильтры должны формироваться на основании загруженных данных ++++++++++
@@ -12,7 +12,7 @@ import { filterChanged, filtersFetched, heroesFiltered } from "../../actions";
 
 function HeroesFilters() {
 
-    const {filters, heroes, filteredHeroes} = useSelector(state => state);
+    const {filters} = useSelector(state => state.filters);
     const dispatch = useDispatch();
     const {request} = useHttp();
 
@@ -26,12 +26,14 @@ function HeroesFilters() {
 
     const onChangeFilter = (element) => {
         dispatch(filterChanged(element))
-        dispatch(heroesFiltered(filteredHeroes, element))
     }
 
     const renderButtons = (arr) => {
         return arr.map(({description, clazz, name}) => {
-            return <button key={name} onClick={() => onChangeFilter(name)} className={clazz}>{description}</button>;
+            return <button 
+                        key={name}
+                        onClick={() => onChangeFilter(name)}
+                        className={clazz}>{description}</button>;
         });
     };
 
