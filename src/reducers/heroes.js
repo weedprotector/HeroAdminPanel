@@ -1,7 +1,16 @@
+
+
 const initialState = {
     heroes: [],
     heroesLoadingStatus: 'idle'
 }
+
+/* const heroes = createReducer(initialState, builder => {
+    builder
+        .addCase(heroesFetching, state => {
+            state.heroesLoadingStatus = 'loading';
+        })
+}) */
 
 const heroes = (state = initialState, action) => {
     switch (action.type) {

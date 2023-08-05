@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { createSelector } from 'reselect'
 
-import { heroesFetching, heroesFetched, heroesFetchingError, heroDelete } from '../../actions';
+import { fetchHeroes} from '../../actions';
+import { heroDelete } from './heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -21,7 +22,6 @@ const HeroesList = () => {
         (state) => state.heroes.heroes,
         (activeFilter, heroes) => {
             if (activeFilter === 'all') {
-                console.log('render')
                 return heroes;
             } else {
                 return heroes.filter(item => item.element === activeFilter)
@@ -36,11 +36,7 @@ const HeroesList = () => {
     const {request} = useHttp();
 
     useEffect(() => {
-        dispatch(heroesFetching());
-        request("http://localhost:3001/heroes")
-            .then(data => dispatch(heroesFetched(data)))
-            .catch(() => dispatch(heroesFetchingError()))
-
+        dispatch(fetchHeroes(request));
         // eslint-disable-next-line
     }, []);
 
@@ -51,7 +47,7 @@ const HeroesList = () => {
     }
 
     const onDelete = (id) => {
-        dispatch(heroDelete(filteredHeroes, id))
+        dispatch(heroDelete(id))
     }
 
     const renderHeroesList = (arr) => {

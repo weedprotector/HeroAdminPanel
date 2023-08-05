@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { heroAdd } from "../../actions";
-
 import { v4 as uuidv4 } from 'uuid';
+
+import { heroAdd } from "../heroesList/heroesSlice";
 
 
 
