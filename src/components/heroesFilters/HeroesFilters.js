@@ -1,8 +1,7 @@
 import { useHttp } from "../../hooks/http.hook";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import {fetchFilters} from '../../actions/index'
-import { filterChanged } from "./filtersSlice";
+import { filterChanged, fetchFilters } from "./filtersSlice";
 
 // Задача для этого компонента:
 // 1) Фильтры должны формироваться на основании загруженных данных ++++++++++
@@ -15,10 +14,9 @@ function HeroesFilters() {
 
     const {filters} = useSelector(state => state.filters);
     const dispatch = useDispatch();
-    const {request} = useHttp();
 
     useEffect(() => {
-        dispatch(fetchFilters(request))
+        dispatch(fetchFilters())
     }, []);
 
 
