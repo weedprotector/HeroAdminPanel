@@ -2,9 +2,8 @@ import {useHttp} from '../../hooks/http.hook';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { createSelector } from 'reselect'
 
-import { heroDelete, fetchHeroes } from './heroesSlice';
+import { heroDelete, fetchHeroes, filteredHeroesSelector } from './heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -16,24 +15,10 @@ import './heroesList.scss';
 // 2) Удаление идет и с json файла при помощи метода DELETE --------
 
 const HeroesList = () => {
-    const filteredHeroesSelector = createSelector(
-        (state) => state.filters.activeFilter,
-        (state) => state.heroes.heroes,
-        (activeFilter, heroes) => {
-            if (activeFilter === 'all') {
-                return heroes;
-            } else {
-                return heroes.filter(item => item.element === activeFilter)
-            }
-        }
-        
-    )
-
     const filteredHeroes = useSelector(filteredHeroesSelector)
     const heroesLoadingStatus = useSelector(state => state.heroes.heroesLoadingStatus);
     const dispatch = useDispatch();
-    const {request} = useHttp();
-
+    
     useEffect(() => {
         dispatch(fetchHeroes());
         // eslint-disable-next-line
@@ -51,7 +36,14 @@ const HeroesList = () => {
 
     const renderHeroesList = (arr) => {
         if (arr.length === 0) {
-            return <h5 className="text-center mt-5">Героев пока нет</h5>
+            return (
+                <CSSTransition 
+                    timeout={0}
+                    classNames='hero'>
+                    <h5 className="text-center mt-5">Героев пока нет</h5>
+                </CSSTransition>
+            )
+            
         }
 
         return arr.map(({id, ...props}) => {
